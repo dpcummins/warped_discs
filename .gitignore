@@ -1,0 +1,9 @@
+*.out
+*.dat
+*.bdat
+*.binp
+amr_grid.inp
+dustopac.inp
+dust_density.inp
+wavelength_micron.inp
+stars.inp
