@@ -11,9 +11,9 @@ int main(int argc, char* argv[]) {
 
     //// Variable declarations ////
     // Wavelength variables
-    int nl12, nl23, nl34;
-    double lam1, lam2, lam3, lam4;
-    double* lam12, * lam23, * lam34;
+    int nl01, nl12, nl23;
+    double lam0, lam1, lam2, lam3;
+    double* lam01, * lam12, * lam23;
 
     // Stellar variables
     double mstar, rstar, tstar;
@@ -26,30 +26,30 @@ int main(int argc, char* argv[]) {
 
     //// Write input files ////
     // Wavelength file
-    lam1 = 0.1;
-    lam2 = 7.0;
-    lam3 = 25.0;
-    lam4 = 1.0E4;
-    nl12 = 20;
-    nl23 = 100;
-    nl34 = 30;
+    lam0 = 0.1;
+    lam1 = 7.0;
+    lam2 = 25.0;
+    lam3 = 1.0E4;
+    nl01 = 20;
+    nl12 = 100;
+    nl23 = 30;
+    lam01 = malloc(nl01*sizeof(double));
     lam12 = malloc(nl12*sizeof(double));
     lam23 = malloc(nl23*sizeof(double));
-    lam34 = malloc(nl34*sizeof(double));
+    logspace(lam01, lam0, lam1, nl01, 0);
     logspace(lam12, lam1, lam2, nl12, 0);
-    logspace(lam23, lam2, lam3, nl23, 0);
-    logspace(lam34, lam3, lam4, nl34, 1);
+    logspace(lam23, lam2, lam3, nl23, 1);
 
     fid = fopen("wavelength_micron.inp", "w");
-    fprintf(fid, "%d\n", nl12+nl23+nl34);
+    fprintf(fid, "%d\n", nl01+nl12+nl23);
+    for(i=0; i<nl01; i++) {
+        fprintf(fid, "%13.6e\n", lam01[i]);
+    }
     for(i=0; i<nl12; i++) {
         fprintf(fid, "%13.6e\n", lam12[i]);
     }
     for(i=0; i<nl23; i++) {
         fprintf(fid, "%13.6e\n", lam23[i]);
-    }
-    for(i=0; i<nl34; i++) {
-        fprintf(fid, "%13.6e\n", lam34[i]);
     }
     fclose(fid);
 
@@ -63,21 +63,21 @@ int main(int argc, char* argv[]) {
     fmt = 2; // 1: frequencies; 2: wavelengths
     fid = fopen("stars.inp", "w");
     fprintf(fid, "%d\n", fmt);
-    fprintf(fid, "1 %d\n\n", nl12+nl23+nl34);
+    fprintf(fid, "1 %d\n\n", nl01+nl12+nl23);
     fprintf(fid, "%13.6e %13.6e %13.6e %13.6e %13.6e\n\n",
             rstar, mstar, pstar[0], pstar[1], pstar[2]);
+    for(i=0; i<nl01; i++) {
+        fprintf(fid, "%13.6e\n", lam01[i]);
+    }
     for(i=0; i<nl12; i++) {
         fprintf(fid, "%13.6e\n", lam12[i]);
     }
     for(i=0; i<nl23; i++) {
         fprintf(fid, "%13.6e\n", lam23[i]);
     }
-    for(i=0; i<nl34; i++) {
-        fprintf(fid, "%13.6e\n", lam34[i]);
-    }
     fprintf(fid, "\n%13.6e\n", -tstar);
     fclose(fid);
+    free(lam01);
     free(lam12);
     free(lam23);
-    free(lam34);
 }
