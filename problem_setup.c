@@ -58,7 +58,10 @@ int main(int argc, char* argv[]) {
     int i, j, k, l;
     
     //// Make grid ////
-    csys = 100;
+    csys = 100; // 0: cartesian; 100: spherical; 200: cylindrical
+    //nr01 = 128;
+    //nr12 = 64;
+    //nr23 = 96;
     nr = 288;
     ntheta = 128;
     nphi = 192;
@@ -76,6 +79,9 @@ int main(int argc, char* argv[]) {
     phi0 = 0.0;
     phi1 = 2*PI;
 
+    //r1 = 13.0*AU;
+    //r2 = 103.0*AU;
+    //r3 = 150.0*AU;
     logspace(r_b, r0, 13*AU, 128, 0);
     logspace(&(r_b[128]), 13*AU, 103*AU, 64, 0);
     logspace(&(r_b[128+64]), 103*AU, r1, 96+1, 1);
@@ -106,13 +112,22 @@ int main(int argc, char* argv[]) {
     meshgrid3d(rc_grid, thetac_grid, phic_grid, r_c, theta_c, phi_c, nr, ntheta, nphi);
 
     //// Warp and twist grid ////
-    rw0 = atof(argv[1])*AU;
-    rw1 = atof(argv[2])*AU;
-    w0 = atof(argv[3])*PI/180;
-    w1 = atof(argv[4])*PI/180;
-    t0 = atof(argv[5])*PI/180;
-    t1 = atof(argv[6])*PI/180;
-
+    // Parse input arguments
+    if(argc == 7) {
+        rw0 = atof(argv[1])*AU;    // start radius
+        rw1 = atof(argv[2])*AU;    // end radius
+        w0 = atof(argv[3])*PI/180; // start warp angle
+        w1 = atof(argv[4])*PI/180; // end warp angle
+        t0 = atof(argv[5])*PI/180; // start twist angle
+        t1 = atof(argv[6])*PI/180; // end twist angle
+    } else {
+        rw0 = 0.0;
+        rw1 = 0.0;
+        w0 = 0.0;
+        w1 = 0.0;
+        t0 = 0.0;
+        t1 = 0.0;
+    }
     idx0 = get_index(r_c, rw0, nr);
     idx1 = get_index(r_c, rw1, nr);
     
@@ -128,7 +143,7 @@ int main(int argc, char* argv[]) {
     for(i=0; i<ntot; i++) {
         warp_angles[i%nr] = warp_angle(r_c[i%nr], rw0, rw1, w0, w1);
         twist_angles[i%nr] = twist_angle(r_c[i%nr], rw0, rw1, t0, t1);
-//        printf("warp_angles[%d] = %f\n", i
+
         rot_axis[0] = sin(twist_angles[i%nr]);
         rot_axis[1] = cos(twist_angles[i%nr]);
         rot_axis[2] = 0.0;
@@ -140,15 +155,15 @@ int main(int argc, char* argv[]) {
     free(twist_angles);
 
     //// Make dust distribution ////
-    p = 1.0;
-    q = 1.25;
-    h0 = 0.08;
+    p = 1.0;           // surface density index
+    q = 1.25;          // scale height index
+    h0 = 0.08;         // aspect ratio at r=R0
     R0 = 10.0*AU;
-    sigma_d0 = 1.0E-1;
+    sigma_d0 = 1.0E-1; // surface density at r=R0
 
-    H_d = malloc(ntot*sizeof(double));
-    sigma_d = malloc(ntot*sizeof(double));
-    rho_d = malloc(ntot*sizeof(double));
+    H_d = malloc(ntot*sizeof(double));       // scale height
+    sigma_d = malloc(ntot*sizeof(double));   // surface density
+    rho_d = malloc(ntot*sizeof(double));     // density
     #if defined(ZEROTEMP) && defined(BINARY)
         temp_d = malloc(ntot*sizeof(double));
     #endif
@@ -176,8 +191,8 @@ int main(int argc, char* argv[]) {
     // Grid file
     fmt = 1;
     fid = fopen("amr_grid.inp", "w");
-    fprintf(fid, "%d\n", fmt); // format = 1
-    fprintf(fid, "0\n");        // amr grid style
+    fprintf(fid, "%d\n", fmt);  // format = 1
+    fprintf(fid, "0\n");        // amr grid style (see manual for details)
     fprintf(fid, "%d\n", csys); // coordinate system
     fprintf(fid, "0\n");        // grid info
     fprintf(fid, "1 1 1\n");    // dimensions to include
@@ -263,10 +278,10 @@ int main(int argc, char* argv[]) {
     free(dspecs);
 
     // radmc3d control file
-    nphot = 1E6;
-    nphot_scat = nphot;
-    scatmode = 5;
-    countwrite = 1E5;
+    nphot = 1E6;        // number of photon packets for temperature calculation (radmc3d mctherm)
+    nphot_scat = nphot; // number of photon packets for image generation (radmc3d image)
+    scatmode = 5;       // see manual for details
+    countwrite = 1E5;   // Monte Carlo stdout frequency
     fid = fopen("radmc3d.inp", "w");
     fprintf(fid, "nphot = %d\n", nphot);
     fprintf(fid, "nphot_scat = %d\n", nphot_scat);
