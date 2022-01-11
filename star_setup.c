@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
 
     //// Write input files ////
     // Wavelength file
-    lam0 = 0.1;
+    lam0 = 0.1;  // all in microns
     lam1 = 7.0;
     lam2 = 25.0;
     lam3 = 1.0E4;
@@ -54,10 +54,10 @@ int main(int argc, char* argv[]) {
     fclose(fid);
 
     // Star file
-    mstar = 2.0*MS;
-    rstar = 3.8*RS;
-    tstar = 6250;
-    pstar[0] = 0.0;
+    mstar = 2.0*MS;    // stellar mass
+    rstar = 3.8*RS;    // stellar radius
+    tstar = 6250;      // stellar temperature
+    pstar[0] = 0.0;    // stellar position
     pstar[1] = 0.0;
     pstar[2] = 0.0;
     fmt = 2; // 1: frequencies; 2: wavelengths
