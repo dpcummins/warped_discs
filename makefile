@@ -5,6 +5,9 @@ LIBS = -lm
 star: star_setup.o $(DEPS)
 	$(CC) -o star_setup star_setup.o $(LIBS)
 
+default: problem_setup.o $(DEPS)
+	$(CC) -o problem_setup problem_setup.o $(LIBS)
+
 bin: problem_setup.o $(DEPS)
 	$(CC) -o problem_setup problem_setup.o $(LIBS) -DBINARY
 
