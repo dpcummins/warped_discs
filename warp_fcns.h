@@ -3,7 +3,7 @@ double warp_angle(double r, double r0, double r1, double w0, double w1) {
     if(r<=r0) {
         w = w0;
     } else if(r>r0 && r<r1) {
-        w = (w1-w0)*0.5*(1.0+cos(PI*(r-r0)/(r1-r0))) + w0;
+        w = (w0-w1)*0.5*(1.0+cos(PI*(r-r0)/(r1-r0))) + w1;
     } else {
         w = w1;
     }
@@ -15,7 +15,7 @@ double twist_angle(double r, double r0, double r1, double t0, double t1) {
     if(r<=r0) {
         t = t0;
     } else if(r>r0 && r<r1) {
-        t = (t1-t0)*0.5*(1.0+cos(PI*(r-r0)/(r1-r0))) + t0;
+        t = (t0-t1)*0.5*(1.0+cos(PI*(r-r0)/(r1-r0))) + t1;
     } else {
         t = t1;
     }
