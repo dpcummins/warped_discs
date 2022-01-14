@@ -2,20 +2,20 @@ CC = gcc
 DEPS = quaternion.h coord_fcns.h warp_fcns.h
 LIBS = -lm
 
-star: star_setup.o $(DEPS)
-	$(CC) -o star_setup star_setup.o $(LIBS)
+star: star_setup.c $(DEPS)
+	$(CC) star_setup.c -o star_setup $(LIBS)
 
-default: problem_setup.o $(DEPS)
-	$(CC) -o problem_setup problem_setup.o $(LIBS)
+default: problem_setup.c $(DEPS)
+	$(CC) problem_setup.c -o problem_setup $(LIBS)
 
-bin: problem_setup.o $(DEPS)
-	$(CC) -o problem_setup problem_setup.o $(LIBS) -DBINARY
+bin: problem_setup.c $(DEPS)
+	$(CC) problem_setup.c -o problem_setup $(LIBS) -DBINARY
 
-zt: problem_setup.o $(DEPS)
-	$(CC) -o problem_setup problem_setup.o $(LIBS) -DZEROTEMP
+zt: problem_setup.c $(DEPS)
+	$(CC) problem_setup.c -o problem_setup $(LIBS) -DZEROTEMP
 
-ztbin: problem_setup.o $(DEPS)
-	$(CC) -o problem_setup problem_setup.o $(LIBS) -DBINARY -DZEROTEMP
+ztbin: problem_setup.c $(DEPS)
+	$(CC) problem_setup.c -o problem_setup $(LIBS) -DBINARY -DZEROTEMP
 
 .PHONY: clean
 clean:
