@@ -26,14 +26,18 @@ Accompanying paper: Cummins et al 2022
 
 ### Compilation
 Requirements:
-- a c compiler, e.g. gcc
+- a c compiler, e.g. gcc, icc
 
 Check makefile, set CC to your C compiler (default: gcc)
-`make star` copmiles star_setup.c
+
+`make star` compiles star_setup.c
 
 `make default` compiles problem_setup.c with default options
+
 `make zt` compiles problem_setup.c with ZEROTEMP option
+
 `make bin` compiles problem_setup.c with BINARY option
+
 `make ztbin` compiles problem_setup.c with ZEROTEMP and BINARY options
 
 Options:
@@ -46,4 +50,5 @@ Options:
 `./star_setup`
 
 `./problem_setup`
+
 `./problem_setup rw0 rw1 w0 w1 t0 t1`
