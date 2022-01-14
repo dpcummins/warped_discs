@@ -191,7 +191,7 @@ int main(int argc, char* argv[]) {
     // Grid file
     fmt = 1;
     fid = fopen("amr_grid.inp", "w");
-    fprintf(fid, "%d\n", fmt);  // format = 1
+    fprintf(fid, "%ld\n", fmt);  // format = 1
     fprintf(fid, "0\n");        // amr grid style (see manual for details)
     fprintf(fid, "%d\n", csys); // coordinate system
     fprintf(fid, "0\n");        // grid info
@@ -225,9 +225,9 @@ int main(int argc, char* argv[]) {
         fclose(fid);
     #else
         fid = fopen("dust_density.inp", "w");
-        fprintf(fid, "%d\n", fmt);
-        fprintf(fid, "%d\n", ntot);
-        fprintf(fid, "%d\n", ndspec);
+        fprintf(fid, "%ld\n", fmt);
+        fprintf(fid, "%ld\n", ntot);
+        fprintf(fid, "%ld\n", ndspec);
         for(i=0; i<ntot; i++) {
             fprintf(fid, "%13.6e\n", rho_d[i]);
         }
@@ -248,9 +248,9 @@ int main(int argc, char* argv[]) {
             free(temp_d);
         #else
             fid = fopen("dust_temperature.dat", "w");
-            fprintf(fid, "%f\n", fmt);
-            fprintf(fid, "%d\n", ntot);
-            fprintf(fid, "%d\n", ndspec);
+            fprintf(fid, "%ld\n", fmt);
+            fprintf(fid, "%ld\n", ntot);
+            fprintf(fid, "%ld\n", ndspec);
             for(i=0; i<ntot; i++) {
                 fprintf(fid, "%f\n", 0.0);
             }
@@ -265,8 +265,8 @@ int main(int argc, char* argv[]) {
     fmt = 2;
     ftype = 10;
     fid = fopen("dustopac.inp", "w");
-    fprintf(fid, "%d\t\t\tFormat number of this file\n", fmt);
-    fprintf(fid, "%d\t\t\tNumber of dust species\n", ndspec);
+    fprintf(fid, "%ld\t\t\tFormat number of this file\n", fmt);
+    fprintf(fid, "%ld\t\t\tNumber of dust species\n", ndspec);
     fprintf(fid, "==============================================================\n");
     for(i=0; i<ndspec; i++) {
         fprintf(fid, "%d\t\t\t1:kappa; 10:kapscatmat; -1:opac\n", ftype);
